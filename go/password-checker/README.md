@@ -13,14 +13,14 @@ This repository contains a WebAssembly Component written in [TinyGo][tinygo], wh
 [tinygo]: https://tinygo.org/getting-started/install/
 [wash]:  https://wasmcloud.com/docs/ecosystem/wash/
 
-# Dependencies
+## Dependencies
 
 Before starting, ensure that you have the following installed:
 
 - The [TinyGo toolchain][tinygo]
 - [`wash`, the WebAssembly SHell][wash] installed.
 
-# Quickstart
+## Quickstart
 
 You'll first need to download a file containing the [500 worst
 passwords](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/500-worst-passwords.txt)
