@@ -8,10 +8,14 @@ import (
 	"go.wasmcloud.dev/component/net/wasihttp"
 )
 
+var (
+	wasiTransport = &wasihttp.Transport{}
+	httpClient    = &http.Client{Transport: wasiTransport}
+)
+
 func init() {
 	// Register the handleRequest function as the handler for all incoming requests.
 	wasihttp.HandleFunc(handleRequest)
-	httpClient = &http.Client{Transport: wasiTransport}
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
