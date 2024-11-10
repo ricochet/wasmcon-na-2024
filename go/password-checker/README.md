@@ -51,7 +51,7 @@ wash dev
 Once `wash dev` is serving your component, to send a request to the running component (via the HTTP server provider):
 
 ```console
-curl localhost:8000/check -d '{"value": "tes12345!"}'                                                                                         [23:01:58]
+curl localhost:8000/api/v1/check -d '{"value": "tes12345!"}'
 ```
 
 You should see a JSON response like:
