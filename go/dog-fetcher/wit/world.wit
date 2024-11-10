@@ -1,0 +1,6 @@
+package wasmcloud:dog-fetcher;
+
+world fetch {
+  include wasmcloud:component-go/imports@0.1.0;
+  export wasi:http/incoming-handler@0.2.0;
+}
