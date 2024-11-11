@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-This workshop will walkthrough building a WebAssembly component with [WASIP2](),
+This workshop will walkthrough building a WebAssembly component with [WASIP2](https://github.com/WebAssembly/WASI/blob/main/wasip2/README.md),
 how to assemble (compose) a declarative application, and finally deploy (run)
 across diverse environments.
 
@@ -10,7 +10,7 @@ across diverse environments.
 
 WebAssembly (Wasm) components are a portable, language agnostic, and sandbox-able compilation target.
 
-Many language toolchains support building WebAssembly component AKA a `.wasm` where the first 8 bytes of the binary are `(component)`, by setting `wasm32-wasip2` as the target.
+Many language toolchains support building WebAssembly component AKA a `.wasm` where the first bytes of the binary are `(component)`, by setting `wasm32-wasip2` as the target.
 
 Some language toolchains benefit from an SDK
 geared towards producing components like `componentize-py` and `componentize-dotnet`. For this workshop, we will focus on Go with the TinyGo compiler and Rust.
@@ -21,7 +21,7 @@ The WebAssembly runtime that we will use is [wasmtime](wasmtime.dev) from the By
 The application platform that we will
 use to run our Wasm applications is CNCF [wasmCloud](https://wasmcloud.com).
 
-[wasmCloud](https://wasmcloud.com) has a CLI called [wash]()(wasmCloud shell) that simplifies the build, develop, and distribute loop of Wasm components. Install wash now. Note that all of the Wasm components that we will build
+[wasmCloud](https://wasmcloud.com) has a CLI called [wash](https://wasmcloud.com/docs/installation)(wasmCloud shell) that simplifies the build, develop, and distribute loop of Wasm components. Install wash now. Note that all of the Wasm components that we will build
 can also be built with direct tooling. That will take more flags and commands than `wash build`.
 
 ### Install wash
@@ -30,6 +30,27 @@ Follow the install instructions for installing wash for your system.
 
 Now you must make your first major decision of this journey.
 What type of application will you create and for which language?
+
+What language will you use?
+
+```bash
+WASMCON_LANG="go"
+```
+
+```bash
+WASMCON_LANG="rust"
+```
+
+Decide which application to create:
+```bash
+WASMCON_APP="dog-fetcher"
+```
+
+Or
+
+```bash
+WASMCON_APP="dog-fetcher"
+```
 
 ### Go with TinyGo
 
@@ -41,6 +62,10 @@ wash dev
 
 Checkout the cutest dogs on the planet by continuing to download random dogs. Who will get Fallout's dogmeat?
 
+```bash
+curl localhost:8000
+```
+
 or
 
 ```bash
@@ -51,6 +76,7 @@ wash dev
 ```
 
 For password-checker, check out the possible inputs:
+
 ```bash
 curl localhost:8000/api/v1/check -d '{"value": "wasmconisawesome"}'
 {"valid":true,"length":16}
@@ -62,7 +88,7 @@ curl localhost:8000/api/v1/check -d '{"value": "1234"}'
 {"valid":false,"message":"password is in the list of 500 worst passwords"}
 ```
 
-For the curious, this is the equivalent command to build a go component looks like:
+For the curious, this is the equivalent command to build a go component:
 
 ```bash
 go generate
@@ -115,18 +141,16 @@ Let's see what it's like to add a new dependency.
 # wash wit deps
 # P.S. this is run automatically
 wash build
-```
 
-`wash build` detected a change in the world definition and automatically fetched WIT dependencies.
-
-```bash
-# to manually do this with Bytecode Alliance tooling, run:
-wkg wit fetch
+# P.S. to manually do this with Bytecode Alliance tooling, run:
+# wkg wit fetch
 
 # regenerate bindings if necessary
 # go generate
 # rebuild
 ```
+
+`wash build` detected a change in the world definition and automatically fetched WIT dependencies.
 
 ## Chapter 2: Compose
 
@@ -165,7 +189,12 @@ Let's create a declarative manifest from our dev loop:
 wash dev --manifest-output-dir .
 ```
 
-Now modify that manifest to use `blobstore-s3`.
+Now modify that manifest to use `blobstore-s3`!
+
+```bash
+# find and uncomment part 2 code
+# PART 2:
+```
 
 ## Chapter 3: Run
 
@@ -201,11 +230,9 @@ We need to get rid of the local file if we want to deploy remotely.
 Let's push our `.wasm` as an OCI artifact to GHCR.
 
 ```bash
-wash push
+wash push ghcr.io/ricochet/components/${WASMCON_APP}-${WASMCON_LANG}:0.2.0 build/*_s.wasm
 
-# P.S. BA tooling command for this is
-# wkg build
-# wkg push wasmcon:component
+# P.S. BA tooling for this is wkg
 ```
 
 Do we need to care what language this app was written in? Nope. It's portable. But is it cloud native? Let's find out.
