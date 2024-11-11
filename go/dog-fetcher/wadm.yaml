@@ -1,7 +1,7 @@
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: tinygo-hello-world
+  name: dog-fetcher
   annotations:
     description: 'HTTP hello world demo in Golang (TinyGo), using the WebAssembly Component Model and WebAssembly Interfaces Types (WIT)'
     wasmcloud.dev/authors: wasmCloud team
@@ -15,13 +15,31 @@ spec:
     - name: http-component
       type: component
       properties:
-        image: file://./build/http_hello_world_s.wasm
+        image: file://./build/dog-fetcher_s.wasm
       traits:
         # Govern the spread/scheduling of the component
         - type: spreadscaler
           properties:
             instances: 1
-
+        - type: link
+          properties:
+            target: httpclient
+            namespace: wasi
+            package: http
+            interfaces: [outgoing-handler]
+        # Establish a unidirectional link to the blobstore,
+        # so the component can make use of blobstore functionality
+        # (i.e. reading/writing data blobs)
+        - type: link
+          properties:
+            target: blobstore
+            namespace: wasi
+            package: blobstore
+            interfaces: [blobstore]
+            target_config:
+              - name: root-directory
+                properties:
+                  root: '/tmp/blobstore'
     # Add a capability provider that enables HTTP access
     - name: httpserver
       type: capability
@@ -45,3 +63,17 @@ spec:
               - name: default-http
                 properties:
                   address: 127.0.0.1:8080
+
+    - name: httpclient
+      type: capability
+      properties:
+        image: ghcr.io/wasmcloud/http-client:0.12.0
+      traits:
+        - type: spreadscaler
+          properties:
+            replicas: 1
+
+    - name: blobstore
+      type: capability
+      properties:
+        image: ghcr.io/wasmcloud/blobstore-fs:0.10.1

@@ -1,11 +1,18 @@
-//go:generate go run github.com/bytecodealliance/wasm-tools-go/cmd/wit-bindgen-go generate --world hello --out gen ./wit
+//go:generate go run github.com/bytecodealliance/wasm-tools-go/cmd/wit-bindgen-go generate --world fetch --out gen ./wit
 package main
 
 import (
-	"io"
+	"encoding/json"
 	"net/http"
+	"path/filepath"
+	"strings"
 
 	"go.wasmcloud.dev/component/net/wasihttp"
+)
+
+const (
+	CONTAINER_NAME          = "doggies"
+	RANDOM_DOG_API_ENDPOINT = "https://dog.ceo/api/breeds/image/random"
 )
 
 var (
@@ -18,29 +25,57 @@ func init() {
 	wasihttp.HandleFunc(handleRequest)
 }
 
+type RandomDog struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+}
+
+type Response struct {
+	Filename   string `json:"filename"`
+	PathOnDisk string `json:"path_on_disk"`
+}
+
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	url := "https://dog.ceo/api/breeds/image/random"
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	// Step 1:
+	// Request random dog image from the API
+	resp, err := httpRequest(RANDOM_DOG_API_ENDPOINT)
 	if err != nil {
-		http.Error(w, "failed to create request", http.StatusBadGateway)
+		http.Error(w, err.Error(), http.StatusBadGateway)
 		return
 	}
 
-	resp, err := httpClient.Do(req)
+	// Decode API response into RandomDog struct
+	var dog RandomDog
+	err = json.NewDecoder(resp.Body).Decode(&dog)
 	if err != nil {
-		http.Error(w, "failed to make outbound request", http.StatusBadGateway)
+		http.Error(w, "failed to decode dog picture api response", http.StatusBadGateway)
 		return
 	}
 
-	w.Header().Set("X-Custom-Header", "proxied")
-	w.WriteHeader(resp.StatusCode)
+	// Create a new request to be sent to fetch the image returned by the random dog API
+	resp, err = httpRequest(dog.Message)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
 
-	_, _ = io.Copy(w, resp.Body)
+	// Extract the filename from the URL returned by the API
+	dogImageName := dog.Message[strings.LastIndex(dog.Message, "/")+1:]
 
-	// // Get dog picture
-	// let dog_picture = make_outgoing_request(&dog_response.message)?;
-	// // TODO: blobstore
-	// Ok(Response::new(dog_picture))
+	err = writeObject(resp.Body, CONTAINER_NAME, dogImageName)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Setup the response to be returned
+	output := Response{
+		Filename:   dogImageName,
+		PathOnDisk: filepath.Join("/tmp/blobstore", CONTAINER_NAME, dogImageName),
+	}
+
+	json.NewEncoder(w).Encode(output)
 }
 
 // Since we don't run this program like a CLI, the `main` function is empty. Instead,
