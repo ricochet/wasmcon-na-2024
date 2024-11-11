@@ -1,18 +1,7 @@
-use url::Url;
-use wasmcloud_component::{
-    http::{ErrorCode, IncomingRequest, OutgoingBody, Response, Server},
-    wasi::{
-        self,
-        http::types::{Fields, Scheme},
-    },
-};
+use serde_json::json;
+use wasmcloud_component::http::{ErrorCode, IncomingRequest, OutgoingBody, Response, Server};
 
-use bytes::Bytes;
-
-mod bindings {
-    wit_bindgen::generate!({ generate_all });
-}
-
+mod http;
 mod objstore;
 
 #[derive(serde::Deserialize)]
@@ -27,75 +16,33 @@ struct DogFetcher;
 impl Server for DogFetcher {
     fn handle(_request: IncomingRequest) -> Result<Response<impl OutgoingBody>, ErrorCode> {
         // Get dog picture URL
-        let dog_picture_url = make_outgoing_request("https://dog.ceo/api/breeds/image/random")?;
-        let dog_response: DogResponse =
-            serde_json::from_reader(dog_picture_url.stream().map_err(|_| {
-                ErrorCode::InternalError(Some("failed to stream dog API response".to_string()))
-            })?)
-            .map_err(|_| {
-                ErrorCode::InternalError(Some("failed to deserialize dog API response".to_string()))
-            })?;
+        let dog_picture_url = http::request("https://dog.ceo/api/breeds/image/random")?;
+        let dog_response: DogResponse = serde_json::from_reader(
+            dog_picture_url
+                .stream()
+                .map_err(|_| internal_error("failed to stream dog API response"))?,
+        )
+        .map_err(|_| internal_error("failed to deserialize dog API response"))?;
 
-        // Get dog picture
-        let dog_picture = make_outgoing_request(&dog_response.message)?;
-        objstore::ensure_container(&CONTAINER_NAME.to_string()).map_err(|e| e.to_string())?;
+        // Form the object key using the last 3 segments of the URL
+        let dog_image_name = dog_response
+            .message
+            .split('/')
+            .skip(4)
+            .collect::<Vec<_>>()
+            .join("-");
+        let dog_picture = http::request(&dog_response.message)?;
+        objstore::write_object(dog_picture, &CONTAINER_NAME.to_string(), &dog_image_name)?;
 
-        match objstore::write_object(Bytes::from(dog_picture), &CONTAINER_NAME.to_string(), "animal.png".to_string()) {
-            Ok(_) => Ok(Response::new(dog_picture)),
-            Err(e) => Err(ErrorCode::InternalError(Some("failed to write object".to_string()))),
-        }
-        
-        // Ok(Response::new(dog_picture))
+        Ok(Response::new(
+            json!({"dog_file": format!("/tmp/{CONTAINER_NAME}/{dog_image_name}")}).to_string(),
+        ))
     }
 }
 
-fn make_outgoing_request(url: &str) -> Result<wasi::http::types::IncomingBody, ErrorCode> {
-    let req = wasi::http::outgoing_handler::OutgoingRequest::new(Fields::new());
-    let url = Url::parse(url)
-        .map_err(|_| ErrorCode::InternalError(Some("failed to parse URL".to_string())))?;
-
-    if url.scheme() == "https" {
-        req.set_scheme(Some(&Scheme::Https)).map_err(|_| {
-            ErrorCode::InternalError(Some("failed to set HTTPS scheme".to_string()))
-        })?;
-    } else if url.scheme() == "http" {
-        req.set_scheme(Some(&Scheme::Http))
-            .map_err(|_| ErrorCode::InternalError(Some("failed to set HTTP scheme".to_string())))?;
-    } else {
-        req.set_scheme(Some(&Scheme::Other(url.scheme().to_string())))
-            .map_err(|_| {
-                ErrorCode::InternalError(Some("failed to set custom scheme".to_string()))
-            })?;
-    }
-
-    req.set_authority(Some(url.authority()))
-        .map_err(|_| ErrorCode::InternalError(Some("failed to set URL authority".to_string())))?;
-
-    req.set_path_with_query(Some(url.path()))
-        .map_err(|_| ErrorCode::InternalError(Some("failed to set URL path".to_string())))?;
-
-    match wasi::http::outgoing_handler::handle(req, None) {
-        Ok(resp) => {
-            resp.subscribe().block();
-            let response = resp
-                .get()
-                .ok_or(())
-                .map_err(|_| {
-                    ErrorCode::InternalError(Some("HTTP request response missing".to_string()))
-                })?
-                .map_err(|_| {
-                    ErrorCode::InternalError(Some(
-                        "HTTP request response requested more than once".to_string(),
-                    ))
-                })?
-                .map_err(|_| ErrorCode::InternalError(Some("HTTP request failed".to_string())))?;
-
-            response.consume().map_err(|_| {
-                ErrorCode::InternalError(Some("failed to consume response".to_string()))
-            })
-        }
-        Err(e) => Err(e),
-    }
+/// Helper function to return an internal error
+pub(crate) fn internal_error(err: impl ToString) -> ErrorCode {
+    ErrorCode::InternalError(Some(err.to_string()))
 }
 
 wasmcloud_component::http::export!(DogFetcher);
