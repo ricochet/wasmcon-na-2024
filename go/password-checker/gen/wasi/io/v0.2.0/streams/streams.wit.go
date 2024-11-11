@@ -5,8 +5,8 @@ package streams
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	ioerror "github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/error"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/poll"
+	ioerror "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/error"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/poll"
 )
 
 // Error represents the imported type alias "wasi:io/streams@0.2.0#error".

@@ -5,7 +5,7 @@ package stdin
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/streams"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/streams"
 )
 
 // InputStream represents the imported type alias "wasi:cli/stdin@0.2.0#input-stream".

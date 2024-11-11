@@ -4,7 +4,7 @@ package container
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/blobstore/v0.2.0-draft/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
 	"unsafe"
 )
 

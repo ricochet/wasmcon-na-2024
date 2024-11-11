@@ -5,7 +5,7 @@ package reveal
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasmcloud/secrets/v0.1.0-draft/store"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasmcloud/secrets/v0.1.0-draft/store"
 )
 
 // Secret represents the imported type alias "wasmcloud:secrets/reveal@0.1.0-draft#secret".

@@ -5,7 +5,7 @@ package terminalstdin
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	terminalinput "github.com/protochron/http-password-checker-go/gen/wasi/cli/v0.2.0/terminal-input"
+	terminalinput "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/cli/v0.2.0/terminal-input"
 )
 
 // TerminalInput represents the imported type alias "wasi:cli/terminal-stdin@0.2.0#terminal-input".

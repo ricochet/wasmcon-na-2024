@@ -5,10 +5,10 @@ package tcp
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	monotonicclock "github.com/protochron/http-password-checker-go/gen/wasi/clocks/v0.2.0/monotonic-clock"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/poll"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/streams"
-	"github.com/protochron/http-password-checker-go/gen/wasi/sockets/v0.2.0/network"
+	monotonicclock "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/clocks/v0.2.0/monotonic-clock"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/poll"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/streams"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/sockets/v0.2.0/network"
 )
 
 // InputStream represents the imported type alias "wasi:sockets/tcp@0.2.0#input-stream".

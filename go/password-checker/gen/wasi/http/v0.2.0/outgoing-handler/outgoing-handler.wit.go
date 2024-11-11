@@ -8,7 +8,7 @@ package outgoinghandler
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/http/v0.2.0/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/http/v0.2.0/types"
 )
 
 // OutgoingRequest represents the imported type alias "wasi:http/outgoing-handler@0.2.0#outgoing-request".

@@ -5,7 +5,7 @@ package preopens
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/filesystem/v0.2.0/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/filesystem/v0.2.0/types"
 )
 
 // Descriptor represents the imported type alias "wasi:filesystem/preopens@0.2.0#descriptor".

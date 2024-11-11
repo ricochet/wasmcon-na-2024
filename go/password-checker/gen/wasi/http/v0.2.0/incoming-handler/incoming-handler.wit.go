@@ -7,7 +7,7 @@
 package incominghandler
 
 import (
-	"github.com/protochron/http-password-checker-go/gen/wasi/http/v0.2.0/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/http/v0.2.0/types"
 )
 
 // IncomingRequest represents the exported type alias "wasi:http/incoming-handler@0.2.0#incoming-request".

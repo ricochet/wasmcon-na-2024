@@ -5,8 +5,8 @@ package udpcreatesocket
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/sockets/v0.2.0/network"
-	"github.com/protochron/http-password-checker-go/gen/wasi/sockets/v0.2.0/udp"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/sockets/v0.2.0/network"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/sockets/v0.2.0/udp"
 )
 
 // Network represents the imported type alias "wasi:sockets/udp-create-socket@0.2.0#network".

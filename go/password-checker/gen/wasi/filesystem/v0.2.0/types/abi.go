@@ -4,7 +4,7 @@ package types
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	wallclock "github.com/protochron/http-password-checker-go/gen/wasi/clocks/v0.2.0/wall-clock"
+	wallclock "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/clocks/v0.2.0/wall-clock"
 	"unsafe"
 )
 

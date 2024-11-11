@@ -5,8 +5,8 @@ package ipnamelookup
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/poll"
-	"github.com/protochron/http-password-checker-go/gen/wasi/sockets/v0.2.0/network"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/poll"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/sockets/v0.2.0/network"
 )
 
 // Pollable represents the imported type alias "wasi:sockets/ip-name-lookup@0.2.0#pollable".

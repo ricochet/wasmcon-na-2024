@@ -12,8 +12,8 @@ import (
 	gopasswordvalidator "github.com/wagslane/go-password-validator"
 	"go.wasmcloud.dev/component/net/wasihttp"
 
-	"github.com/protochron/http-password-checker-go/gen/wasi/blobstore/v0.2.0-draft/blobstore"
-	blobstoreTypes "github.com/protochron/http-password-checker-go/gen/wasi/blobstore/v0.2.0-draft/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/blobstore"
+	blobstoreTypes "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
 )
 
 type CheckRequest struct {

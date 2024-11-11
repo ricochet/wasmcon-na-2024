@@ -4,7 +4,7 @@ package blobstore
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/blobstore/v0.2.0-draft/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
 )
 
 func lower_ObjectID(v types.ObjectID) (f0 *uint8, f1 uint32, f2 *uint8, f3 uint32) {

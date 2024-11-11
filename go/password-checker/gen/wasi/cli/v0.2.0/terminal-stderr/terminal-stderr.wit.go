@@ -5,7 +5,7 @@ package terminalstderr
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	terminaloutput "github.com/protochron/http-password-checker-go/gen/wasi/cli/v0.2.0/terminal-output"
+	terminaloutput "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/cli/v0.2.0/terminal-output"
 )
 
 // TerminalOutput represents the imported type alias "wasi:cli/terminal-stderr@0.2.0#terminal-output".

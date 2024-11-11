@@ -9,10 +9,10 @@ package types
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	monotonicclock "github.com/protochron/http-password-checker-go/gen/wasi/clocks/v0.2.0/monotonic-clock"
-	ioerror "github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/error"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/poll"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.0/streams"
+	monotonicclock "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/clocks/v0.2.0/monotonic-clock"
+	ioerror "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/error"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/poll"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.0/streams"
 )
 
 // Duration represents the type alias "wasi:http/types@0.2.0#duration".

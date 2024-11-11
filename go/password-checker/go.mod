@@ -1,4 +1,4 @@
-module github.com/protochron/http-password-checker-go
+module github.com/ricochet/wasmcon-na-2024/go/password-checker
 
 go 1.23.0
 

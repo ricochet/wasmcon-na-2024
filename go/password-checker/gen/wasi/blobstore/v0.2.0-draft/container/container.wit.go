@@ -7,8 +7,8 @@ package container
 
 import (
 	"github.com/bytecodealliance/wasm-tools-go/cm"
-	"github.com/protochron/http-password-checker-go/gen/wasi/blobstore/v0.2.0-draft/types"
-	"github.com/protochron/http-password-checker-go/gen/wasi/io/v0.2.1/streams"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
+	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/io/v0.2.1/streams"
 )
 
 // InputStream represents the imported type alias "wasi:blobstore/container@0.2.0-draft#input-stream".
