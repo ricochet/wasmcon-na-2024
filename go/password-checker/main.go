@@ -89,7 +89,7 @@ func errResponseJSON(w http.ResponseWriter, code int, message string) {
 }
 
 func getPasswordList(w http.ResponseWriter) ([]string, error) {
-	storeResult := blobstore.GetContainer("")
+	storeResult := blobstore.GetContainer("passwords")
 	st := storeResult.OK()
 	if st == nil {
 		return nil, fmt.Errorf("failed to get blobstore container")

@@ -9,9 +9,10 @@
 
 // static PASSWORD_LIST_FILE: LazyLock<String> =
 //     LazyLock::new(|| "500-worst-passwords.txt".to_string());
+// static PASSWORD_BUCKET_NAME: LazyLock<String> = LazyLock::new(|| "passwords".to_string());
 
 // pub fn get_password_list() -> anyhow::Result<Vec<String>> {
-//     let container = blobstore::get_container(&String::new())
+//     let container = blobstore::get_container(&PASSWORD_BUCKET_NAME)
 //         .map_err(|e| anyhow::anyhow!("failed to get container: {e}"))?;
 //     container
 //         .has_object(&PASSWORD_LIST_FILE)
