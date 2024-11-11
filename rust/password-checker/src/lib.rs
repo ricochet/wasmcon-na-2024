@@ -5,6 +5,7 @@ use api::{
     error_resp_json, ErrorInfo, PasswordCheckRequest, PasswordCheckResponse, PasswordStrength,
     ResponseEnvelope, SecretQuery,
 };
+mod blobstore;
 
 mod bindings {
     use crate::Component;
@@ -58,7 +59,7 @@ impl http::Server for Component {
                                 ResponseEnvelope::<()>::Error {
                                     error: ErrorInfo {
                                         code: "something".into(),
-                                        msg: format!("invalid password check request: {e}").into(),
+                                        msg: format!("invalid password check request: {e}"),
                                     },
                                 },
                             )
@@ -79,7 +80,7 @@ impl http::Server for Component {
                                     ResponseEnvelope::<()>::Error {
                                         error: ErrorInfo {
                                             code: "invalid-request".into(),
-                                            msg: format!("invalid secret: {e}").into(),
+                                            msg: format!("invalid secret: {e}"),
                                         },
                                     },
                                 );
@@ -105,6 +106,35 @@ impl http::Server for Component {
 
                 // Process the password
                 let analyzed = passwords::analyzer::analyze(&password);
+
+                // PART 2: This can be uncommented as part of loading a list of common passwords
+                // // Now check that it isn't a common password
+                // let passwords = match blobstore::get_password_list() {
+                //     Ok(v) => v,
+                //     Err(e) => {
+                //         return error_resp_json(
+                //             http::StatusCode::INTERNAL_SERVER_ERROR,
+                //             ResponseEnvelope::<()>::Error {
+                //                 error: ErrorInfo {
+                //                     code: "server-error".into(),
+                //                     msg: format!("failed to get password list: {e}"),
+                //                 },
+                //             },
+                //         )
+                //     }
+                // };
+
+                // if passwords.contains(&password) {
+                //     return error_resp_json(
+                //         http::StatusCode::BAD_REQUEST,
+                //         ResponseEnvelope::<()>::Error {
+                //             error: ErrorInfo {
+                //                 code: "invalid-request".into(),
+                //                 msg: "password is in the list of 500 worst passwords".into(),
+                //             },
+                //         },
+                //     );
+                // }
 
                 // Return the result
                 ResponseEnvelope::Success {
