@@ -55,7 +55,7 @@ func writeObject(reader io.ReadCloser, containerName string, filename string) er
 func ensureContainer(name string) (*blobstore.Container, error) {
 	containerName := types.ContainerName(name)
 	exists := blobstore.ContainerExists(containerName)
-	if exists.IsOK() {
+	if ok := exists.OK(); ok != nil && *ok {
 		containerReq := blobstore.GetContainer(containerName)
 		if containerReq.IsErr() {
 			return nil, errors.New("container does not exist")
