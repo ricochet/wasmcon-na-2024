@@ -19,6 +19,9 @@ world component {
   ///
   import wasmcloud:secrets/reveal@0.1.0-draft;
 
+  // PART 2: This can be uncommented 
+  // import wasi:blobstore/blobstore@0.2.0-draft;
+
   /// This component acts as a HTTP handler (i.e. it responds to HTTP requests),
   /// and to do that, it must expose a handler function which invokers (e.g. the wasmCloud host, wasmtime, or another component)
   /// can use to send in requests (and receive responses).

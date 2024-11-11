@@ -10,6 +10,7 @@ This repository contains a WebAssembly Component written in [Rust][rust], which:
 [wasi-http]: https://github.com/WebAssembly/wasi-http
 [httpserver-provider]: https://github.com/wasmCloud/wasmCloud/tree/main/crates/providers/http-server
 [httpserver-interface]: https://github.com/wasmCloud/interfaces/tree/main/httpserver
+[blobstore-provider]: https://github.com/wasmCloud/wasmCloud/tree/main/crates/provider-blobstore-fs
 [wadm]: https://github.com/wasmCloud/wadm
 [wasmcloud]: https://wasmcloud.com/docs/intro
 [rust]: https://rust-lang.org
@@ -19,7 +20,7 @@ This repository contains a WebAssembly Component written in [Rust][rust], which:
 This relies on the following installed software:
 
 | Name    | Description                                                                                                 |
-|---------|-------------------------------------------------------------------------------------------------------------|
+| ------- | ----------------------------------------------------------------------------------------------------------- |
 | `cargo` | [Rust package installer][cargo] (part of the Rust toolchain)                                                |
 | `wash`  | [Wasmcloud Shell][wash] controls your [wasmcloud][wasmcloud] host instances and enables building components |
 
@@ -27,6 +28,10 @@ This relies on the following installed software:
 [cargo]: https://doc.rust-lang.org/cargo
 
 # Quickstart
+
+You'll first need to download a file containing the [500 worst
+passwords](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/500-worst-passwords.txt)
+and save it in `/tmp/`. Running `./setup.sh` will do this for you.
 
 To get started developing this repository quickly, clone the repo and run `wash dev`:
 
@@ -41,6 +46,7 @@ wash dev
 - Builds a declarative WADM manifest consisting of:
   - Your locally built component
   - A [HTTP server provider][httpserver-provider] which will receive requests from the outside world (on port 8000 by default)
+  - A [Blobstore provider][blobstore-provider] which will serve a file containing the 500 worst passwords
   - Necessary links between providers and your component so your component can handle web traffic
 - Deploys the built manifest (i.e all dependencies to run this application) locally
 - Watches your code for changes and re-deploys when necessary.
