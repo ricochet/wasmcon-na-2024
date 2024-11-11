@@ -2,18 +2,16 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 
 	gopasswordvalidator "github.com/wagslane/go-password-validator"
 	"go.wasmcloud.dev/component/net/wasihttp"
-
-	"github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/blobstore"
-	blobstoreTypes "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
+	// PART 2:
+	// "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/blobstore"
+	// blobstoreTypes "github.com/ricochet/wasmcon-na-2024/go/password-checker/gen/wasi/blobstore/v0.2.0-draft/types"
 )
 
 type CheckRequest struct {
@@ -52,18 +50,19 @@ func checkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	badPasswordsList, err := getPasswordList(w)
-	if err != nil {
-		errResponseJSON(w, http.StatusInternalServerError, fmt.Sprintf("failed to get bad passwords list: %s", err.Error()))
-		return
-	}
+	// PART 2:
+	// badPasswordsList, err := getPasswordList(w)
+	// if err != nil {
+	// 	errResponseJSON(w, http.StatusInternalServerError, fmt.Sprintf("failed to get bad passwords list: %s", err.Error()))
+	// 	return
+	// }
 
-	for pw := range badPasswordsList {
-		if req.Value == badPasswordsList[pw] {
-			errResponseJSON(w, http.StatusBadRequest, "password is in the list of 500 worst passwords")
-			return
-		}
-	}
+	// for pw := range badPasswordsList {
+	// 	if req.Value == badPasswordsList[pw] {
+	// 		errResponseJSON(w, http.StatusBadRequest, "password is in the list of 500 worst passwords")
+	// 		return
+	// 	}
+	// }
 
 	err = gopasswordvalidator.Validate(req.Value, 60)
 	if err != nil {
@@ -88,57 +87,58 @@ func errResponseJSON(w http.ResponseWriter, code int, message string) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
-func getPasswordList(w http.ResponseWriter) ([]string, error) {
-	storeResult := blobstore.GetContainer("passwords")
-	st := storeResult.OK()
-	if st == nil {
-		return nil, fmt.Errorf("failed to get blobstore container")
-	}
+// PART 2:
+// func getPasswordList(w http.ResponseWriter) ([]string, error) {
+// 	storeResult := blobstore.GetContainer("passwords")
+// 	st := storeResult.OK()
+// 	if st == nil {
+// 		return nil, fmt.Errorf("failed to get blobstore container")
+// 	}
 
-	if res := st.HasObject("500-worst-passwords.txt"); res.IsErr() {
-		return nil, fmt.Errorf("failed to get bad passwords file")
-	}
+// 	if res := st.HasObject("500-worst-passwords.txt"); res.IsErr() {
+// 		return nil, fmt.Errorf("failed to get bad passwords file")
+// 	}
 
-	info := st.ObjectInfo("500-worst-passwords.txt")
-	if info.IsErr() {
-		return nil, fmt.Errorf("failed to get bad passwords file metadata")
-	}
+// 	info := st.ObjectInfo("500-worst-passwords.txt")
+// 	if info.IsErr() {
+// 		return nil, fmt.Errorf("failed to get bad passwords file metadata")
+// 	}
 
-	badPasswordsSize := info.OK().Size
-	badPasswords := st.GetData("500-worst-passwords.txt", 0, uint64(badPasswordsSize))
-	if badPasswords.IsErr() {
-		return nil, fmt.Errorf("failed to get bad passwords file data")
-	}
+// 	badPasswordsSize := info.OK().Size
+// 	badPasswords := st.GetData("500-worst-passwords.txt", 0, uint64(badPasswordsSize))
+// 	if badPasswords.IsErr() {
+// 		return nil, fmt.Errorf("failed to get bad passwords file data")
+// 	}
 
-	passwords := badPasswords.OK()
-	stream := blobstoreTypes.IncomingValueIncomingValueConsumeAsync(*passwords)
-	if stream.IsErr() {
-		return nil, fmt.Errorf("failed to consume bad passwords file data")
-	}
+// 	passwords := badPasswords.OK()
+// 	stream := blobstoreTypes.IncomingValueIncomingValueConsumeAsync(*passwords)
+// 	if stream.IsErr() {
+// 		return nil, fmt.Errorf("failed to consume bad passwords file data")
+// 	}
 
-	data := stream.OK()
-	var buf []byte
-	for {
-		res := data.BlockingRead(4096)
-		if err := res.Err(); err != nil {
-			if err.Closed() {
-				break
-			}
-			return nil, fmt.Errorf("failed to read bad passwords file data: %s", err.LastOperationFailed().ToDebugString())
-		}
-		buf = append(buf, res.OK().Slice()...)
-	}
-	data.ResourceDrop()
+// 	data := stream.OK()
+// 	var buf []byte
+// 	for {
+// 		res := data.BlockingRead(4096)
+// 		if err := res.Err(); err != nil {
+// 			if err.Closed() {
+// 				break
+// 			}
+// 			return nil, fmt.Errorf("failed to read bad passwords file data: %s", err.LastOperationFailed().ToDebugString())
+// 		}
+// 		buf = append(buf, res.OK().Slice()...)
+// 	}
+// 	data.ResourceDrop()
 
-	scanner := bufio.NewScanner(strings.NewReader(string(buf)))
-	scanner.Split(bufio.ScanLines)
-	var badPasswordsList []string
-	for scanner.Scan() {
-		badPasswordsList = append(badPasswordsList, scanner.Text())
-	}
+// 	scanner := bufio.NewScanner(strings.NewReader(string(buf)))
+// 	scanner.Split(bufio.ScanLines)
+// 	var badPasswordsList []string
+// 	for scanner.Scan() {
+// 		badPasswordsList = append(badPasswordsList, scanner.Text())
+// 	}
 
-	return badPasswordsList, nil
-}
+// 	return badPasswordsList, nil
+// }
 
 // Since we don't run this program like a CLI, the `main` function is empty. Instead,
 // we call the `handleRequest` function when an HTTP request is received.
