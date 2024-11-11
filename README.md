@@ -201,6 +201,19 @@ wash up -d
 
 Now modify that manifest to use `blobstore-s3`!
 
+If you're running locally on a mac right now, you can use an S3 compatible blobstore like [MinIO](https://min.io/).
+
+```bash
+brew install minio/stable/minio
+minio server start
+```
+
+Or with docker:
+
+```bash
+docker run -d -p 9000:9000 -p 9001:9001 minio/minio server /data --console-address ":9001"
+```
+
 Add the following configuration to the link created (originally) for blobstore-fs.
 
 ```yaml
