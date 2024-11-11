@@ -195,11 +195,26 @@ Let's create a declarative manifest from our dev loop:
 wash dev --manifest-output-dir .
 ```
 
+```bash
+wash up -d
+```
+
 Now modify that manifest to use `blobstore-s3`!
 
+Add the following configuration to the link created (originally) for blobstore-fs.
+
+```yaml
+target:
+  name: dep-blobstore-fs
+  config:
+    - name: wasi-blobstore-config
+      properties:
+        config_json: '{"endpoint": "http://127.0.0.1:9000", "access_key_id": "minioadmin", "secret_access_key": "minioadmin", "region": "local"}'
+```
+
 ```bash
-# find and uncomment part 2 code
-# PART 2:
+# rename generated wadm name to wadm.yaml
+wash app deploy wadm.yaml
 ```
 
 ## Chapter 3: Run
