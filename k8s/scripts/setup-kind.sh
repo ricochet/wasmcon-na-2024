@@ -37,7 +37,7 @@ kubectl wait --for condition=established --timeout=60s crd/wasmcloudhostconfigs.
 ##############################
 # Deploy apps
 ############################## 
-kustomize build ./deploy/dev/apps | kubectl apply -f -
+kubectl apply -k ./deploy/dev/apps
 
 # wait for http service
 kubectl wait --for=jsonpath='{.status.loadBalancer.ingress}' ing/rust-hello-world
