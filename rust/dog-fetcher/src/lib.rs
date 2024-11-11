@@ -7,10 +7,20 @@ use wasmcloud_component::{
     },
 };
 
+use bytes::Bytes;
+
+mod bindings {
+    wit_bindgen::generate!({ generate_all });
+}
+
+mod objstore;
+
 #[derive(serde::Deserialize)]
 struct DogResponse {
     message: String,
 }
+
+const CONTAINER_NAME: &str = "doggies";
 
 struct DogFetcher;
 
@@ -28,8 +38,14 @@ impl Server for DogFetcher {
 
         // Get dog picture
         let dog_picture = make_outgoing_request(&dog_response.message)?;
-        // TODO: blobstore
-        Ok(Response::new(dog_picture))
+        objstore::ensure_container(&CONTAINER_NAME.to_string()).map_err(|e| e.to_string())?;
+
+        match objstore::write_object(Bytes::from(dog_picture), &CONTAINER_NAME.to_string(), "animal.png".to_string()) {
+            Ok(_) => Ok(Response::new(dog_picture)),
+            Err(e) => Err(ErrorCode::InternalError(Some("failed to write object".to_string()))),
+        }
+        
+        // Ok(Response::new(dog_picture))
     }
 }
 

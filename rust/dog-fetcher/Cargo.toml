@@ -10,7 +10,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow = "1.0.93"
+bytes = "1.8.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 url = "2.5.3"
 wasmcloud-component = "0.2.0"
+wit-bindgen = "0.34.0"

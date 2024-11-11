@@ -34,34 +34,51 @@ What type of application will you create and for which language?
 ### Go with TinyGo
 
 ```bash
-wash new component --git ricochet/wasmcon-na-20204 --subfolder go/dog-fetcher
+wash new component --git ricochet/wasmcon-na-2024 --subfolder go/dog-fetcher
 cd component
 wash dev
 ```
+
+Checkout the cutest dogs on the planet by continuing to download random dogs. Who will get Fallout's dogmeat?
 
 or
 
 ```bash
-wash new component --git ricochet/wasmcon-na-20204 --subfolder go/password-checker
+wash new component --git ricochet/wasmcon-na-2024 --subfolder go/password-checker
 cd component
+./setup.sh # little pre-populate 
 wash dev
 ```
 
-For the curious, this is the equivalent command:
+For password-checker, check out the possible inputs:
+```bash
+curl localhost:8000/api/v1/check -d '{"value": "wasmconisawesome"}'
+{"valid":true,"length":16}
+
+curl localhost:8000/api/v1/check -d '{"value": "veryshort"}'
+{"valid":false,"message":"insecure password, try including more special characters, using uppercase letters, using numbers or using a longer password"}
+
+curl localhost:8000/api/v1/check -d '{"value": "1234"}'
+{"valid":false,"message":"password is in the list of 500 worst passwords"}
 ```
-tinygo build 
+
+For the curious, this is the equivalent command to build a go component looks like:
+
+```bash
+go generate
+tinygo build --target=wasip2 --wit-package ./wit --wit-world password-checker
 ```
 
 ### Rust
 
 ```bash
-wash new component --git ricochet/wasmcon-na-20204 --subfolder rust/dog-fetcher
+wash new component --git ricochet/wasmcon-na-2024 --subfolder rust/dog-fetcher
 cd component
 wash dev
 ```
 
 ```bash
-wash new component --git ricochet/wasmcon-na-20204 --subfolder rust/password-checker
+wash new component --git ricochet/wasmcon-na-2024 --subfolder rust/password-checker
 cd component
 wash dev
 ```

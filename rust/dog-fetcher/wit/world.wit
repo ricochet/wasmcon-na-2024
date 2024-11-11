@@ -2,6 +2,6 @@ package wasmcloud:hello;
 
 world hello {
   import wasi:http/outgoing-handler@0.2.2;
-
+  import wasi:blobstore/blobstore@0.2.0-draft;
   export wasi:http/incoming-handler@0.2.2;
 }
