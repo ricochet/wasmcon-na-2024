@@ -34,11 +34,16 @@ What type of application will you create and for which language?
 What language will you use?
 
 ```bash
-WASMCON_LANG="go"
+export WASMCON_LANG="go"
 ```
 
 ```bash
-WASMCON_LANG="rust"
+export WASMCON_LANG="rust"
+```
+
+```bash
+WASMCON_APP="password-checker"
+wash new component --git ricochet/wasmcon-na-2024 --subfolder ${WASMCON_LANG}/${WASMCON_APP}
 ```
 
 Decide which application to create:
@@ -49,7 +54,7 @@ WASMCON_APP="dog-fetcher"
 Or
 
 ```bash
-WASMCON_APP="dog-fetcher"
+WASMCON_APP="password-checker"
 ```
 
 ### Go with TinyGo
@@ -131,15 +136,17 @@ wasm-tools component wit build/component.wasm
 
 ### Extend
 
-Let's see what it's like to add a new dependency.
+Let's see what it's like to add a new dependency. 
+
+Search for and uncomment the code for `PART 2:`
+
+1. First uncomment blobstore in the `world.wit`
+2. Then uncomment all of the `PART 2:` sources
 
 ```bash
-# add blobstore to world
-# TODO add sed command
-
 # fetch new WIT deps
-# wash wit deps
-# P.S. this is run automatically
+# both `wash dev` and `wash build` call `wash wit deps`
+# to populate deps based on world.wit
 wash build
 
 # P.S. to manually do this with Bytecode Alliance tooling, run:
@@ -160,10 +167,9 @@ In cloud native nomenclature, an application is the combination of microservices
 
 You might be wondering, why would I need an application platform if wasmtime (with plugins) should be able to run my component? For the same reason we need kubernetes to orchestrate containers at scale, we gain many benefits of Wasm native orchestration. WebAssembly components are a fundamentally new unit of compute whose benefits are best realized via native orchestration.
 
-Components offer a fundamentally finer-grained abstraction than containers, like Kubernetes for WebAssembly, so wasmCloud provides a Wasm-native orchestrator to best take advantage of the unique properties that WebAssembly components can provide. Wasm-native works with cloud-native and runs seamlessly on Kubernetes or any other container execution engine like AWS Fargate, Microsoft AKS, or Google Cloud Run.”
+Components offer a fundamentally finer-grained abstraction than containers, like Kubernetes for WebAssembly, so wasmCloud provides a Wasm-native orchestrator to best take advantage of the unique properties that WebAssembly components can provide. Wasm-native works with cloud-native and runs seamlessly on Kubernetes or any other container execution engine like AWS Fargate, Microsoft AKS, or Google Cloud Run.
 
-# TODO TOD OTO TODO
-wasmtime is like the kubelet, and wasmCloud is like kubernetes.
+wasmtime is like the kubelet, and wasmCloud is the entire platform like kubernetes including a scheduler and runtime abstraction.
 
 Unlike microservices where we need to layer on API Gateways and service meshes to understand the API provided by a microservice, with components, they are themselves declarative and introspectable.
 
