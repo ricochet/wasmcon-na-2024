@@ -63,11 +63,12 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	// Extract the filename from the URL returned by the API
 	dogImageName := dog.Message[strings.LastIndex(dog.Message, "/")+1:]
 
-	err = writeObject(resp.Body, CONTAINER_NAME, dogImageName)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// PART 2:
+	// err = writeObject(resp.Body, CONTAINER_NAME, dogImageName)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 
 	// Setup the response to be returned
 	output := Response{
