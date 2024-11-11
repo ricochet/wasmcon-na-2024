@@ -274,10 +274,12 @@ wash app deploy wadm.yaml
 
 If you have access to another k8s cluster, deploy the wasmCloud platform helm chart.
 
+First things first, `cd k8s`.
+
 For running k8s locally, use kind.
 
 ```bash
-./deploy/setup-kind.sh
+./scripts/setup-kind.sh
 ```
 
 ```bash
